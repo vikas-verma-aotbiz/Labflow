@@ -4,6 +4,7 @@ import {
   ArrowRight, 
   CheckCircle2, 
   Zap, 
+  X,
 } from "lucide-react";
 import * as Content from "./constants.js";
 
@@ -31,6 +32,26 @@ const FeatureBlock = ({ icon: Icon, title, description }) => (
 );
 
 const LandingPage = () => {
+  const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe7WG0i1DTKIbnbtjc2ZgC2lp30wzkpWYlcd1RA2xlxJvPDQQ/viewform?usp=publish-editor";
+  const embeddedGoogleFormUrl = `${googleFormUrl}&embedded=true`;
+  const [isLeadFormOpen, setIsLeadFormOpen] = React.useState(false);
+
+  const openLeadForm = () => {
+    setIsLeadFormOpen(true);
+  };
+
+  const closeLeadForm = () => setIsLeadFormOpen(false);
+
+  React.useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    if (isLeadFormOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isLeadFormOpen]);
+
   return (
     <div className="min-h-screen bg-white font-sans text-zinc-900 selection:bg-emerald-100 selection:text-emerald-900">
       {/* Navigation */}
@@ -46,7 +67,10 @@ const LandingPage = () => {
             {Content.NAV_LINKS.map((link, i) => (
               <NavLink key={i} {...link} />
             ))}
-            <button className="bg-zinc-900 text-white px-6 py-2.5 rounded-full hover:bg-zinc-800 transition-colors">
+            <button
+              onClick={openLeadForm}
+              className="bg-zinc-900 text-white px-6 py-2.5 rounded-full hover:bg-zinc-800 transition-colors"
+            >
               Get Started
             </button>
           </div>
@@ -77,7 +101,10 @@ const LandingPage = () => {
                 {Content.HERO_CONTENT.subheadline}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-emerald-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-200">
+                <button
+                  onClick={openLeadForm}
+                  className="bg-emerald-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-emerald-700 transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-200"
+                >
                   {Content.HERO_CONTENT.primaryCTA}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
@@ -96,8 +123,8 @@ const LandingPage = () => {
               <div className="absolute -inset-4 bg-emerald-100/50 rounded-[2rem] blur-3xl -z-10"></div>
               <div className="bg-zinc-900 rounded-[2rem] p-4 shadow-2xl border border-zinc-800">
                 <img 
-                  src="https://picsum.photos/seed/dashboard/1200/800" 
-                  alt="Eduzap Dashboard" 
+                  src="https://images.pexels.com/photos/3825581/pexels-photo-3825581.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                  alt="Lab diagnostic dashboard" 
                   className="rounded-2xl w-full object-cover aspect-[4/3]"
                   referrerPolicy="no-referrer"
                 />
@@ -183,7 +210,10 @@ const LandingPage = () => {
             <p className="text-xl text-zinc-600 mb-12 max-w-2xl mx-auto">
               {Content.CLOSING_CONTENT.description}
             </p>
-            <button className="bg-zinc-900 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-zinc-800 transition-all shadow-2xl shadow-zinc-200">
+            <button
+              onClick={openLeadForm}
+              className="bg-zinc-900 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-zinc-800 transition-all shadow-2xl shadow-zinc-200"
+            >
               {Content.CLOSING_CONTENT.cta}
             </button>
           </motion.div>
@@ -209,6 +239,36 @@ const LandingPage = () => {
           </div>
         </div>
       </footer>
+
+      {isLeadFormOpen && (
+        <div
+          className="fixed inset-0 z-[70] bg-zinc-900/70 backdrop-blur-sm flex items-center justify-center px-4 py-6"
+          onClick={closeLeadForm}
+        >
+          <div
+            className="w-full max-w-5xl h-[90vh] bg-white rounded-3xl overflow-hidden shadow-[0_40px_120px_-25px_rgba(0,0,0,0.45)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="h-14 px-5 border-b border-zinc-200 flex items-center justify-between bg-white">
+              <p className="text-sm font-bold text-zinc-700 tracking-wide">Book a Demo</p>
+              <button
+                onClick={closeLeadForm}
+                className="w-9 h-9 rounded-full border border-zinc-200 hover:bg-zinc-100 transition-colors flex items-center justify-center"
+                aria-label="Close form"
+              >
+                <X className="w-5 h-5 text-zinc-600" />
+              </button>
+            </div>
+            <iframe
+              src={embeddedGoogleFormUrl}
+              title="Lab Lead Form"
+              className="w-full h-[calc(90vh-56px)] border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

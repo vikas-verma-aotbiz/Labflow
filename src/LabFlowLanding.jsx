@@ -4,7 +4,9 @@ import {
   ArrowRight, 
   CheckCircle2, 
   PlayCircle,
-  Activity
+  Activity,
+  FileText,
+  X
 } from "lucide-react";
 import * as Content from "./labFlowConstants.js";
 
@@ -24,7 +26,43 @@ const FeatureBlock = ({ icon: Icon, title, description }) => (
   </div>
 );
 
+const ReportExplainItem = ({ title, description }) => (
+  <div className="p-7 bg-white rounded-3xl border border-slate-200/70 shadow-sm">
+    <div className="flex items-start gap-4">
+      <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0">
+        <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+      </div>
+      <div>
+        <h3 className="text-lg font-black tracking-tight text-slate-900 mb-2">{title}</h3>
+        <p className="text-slate-500 leading-relaxed text-sm">{description}</p>
+      </div>
+    </div>
+  </div>
+);
+
 const LabFlowLanding = () => {
+  const reportContent = Content.REPORT_EXPLAIN_CONTENT;
+  const sampleReport = reportContent.sampleReport;
+  const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSe7WG0i1DTKIbnbtjc2ZgC2lp30wzkpWYlcd1RA2xlxJvPDQQ/viewform?usp=publish-editor";
+  const embeddedGoogleFormUrl = `${googleFormUrl}&embedded=true`;
+  const [isLeadFormOpen, setIsLeadFormOpen] = React.useState(false);
+
+  const openLeadForm = () => {
+    setIsLeadFormOpen(true);
+  };
+
+  const closeLeadForm = () => setIsLeadFormOpen(false);
+
+  React.useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    if (isLeadFormOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isLeadFormOpen]);
+
   return (
     <div className="min-h-screen bg-[#FAFAFB] font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900">
       {/* Navigation */}
@@ -40,7 +78,10 @@ const LabFlowLanding = () => {
             {Content.NAV_LINKS.map((link, i) => (
               <NavLink key={i} {...link} />
             ))}
-            <button className="bg-slate-900 text-white px-7 py-3 rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-slate-200">
+            <button
+              onClick={openLeadForm}
+              className="bg-slate-900 text-white px-7 py-3 rounded-full hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-slate-200"
+            >
               Get Started
             </button>
           </div>
@@ -69,7 +110,10 @@ const LabFlowLanding = () => {
                 {Content.HERO_CONTENT.subheadline}
               </p>
               <div className="flex flex-wrap gap-5">
-                <button className="bg-indigo-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-indigo-700 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 shadow-2xl shadow-indigo-200">
+                <button
+                  onClick={openLeadForm}
+                  className="bg-indigo-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-indigo-700 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 shadow-2xl shadow-indigo-200"
+                >
                   {Content.HERO_CONTENT.primaryCTA}
                   <ArrowRight className="w-5 h-5" />
                 </button>
@@ -89,8 +133,8 @@ const LabFlowLanding = () => {
               <div className="absolute -inset-10 bg-gradient-to-tr from-indigo-500/20 to-violet-500/20 rounded-full blur-[100px] -z-10"></div>
               <div className="relative bg-white rounded-[3rem] p-4 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] border border-slate-200/50">
                 <img 
-                  src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000" 
-                  alt="LabFlow Interface" 
+                  src="https://images.pexels.com/photos/2280549/pexels-photo-2280549.jpeg?auto=compress&cs=tinysrgb&w=1000"
+                  alt="Diagnostic laboratory workflow" 
                   className="rounded-[2.5rem] w-full object-cover aspect-[3/4]"
                   referrerPolicy="no-referrer"
                 />
@@ -153,8 +197,114 @@ const LabFlowLanding = () => {
         </div>
       </section>
 
+      {/* Report Explanation Section */}
+      <section id="reports" className="pt-32 pb-16 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-bold uppercase tracking-[0.18em] mb-6">
+              <FileText className="w-4 h-4" />
+              {reportContent.badge}
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-slate-900 mb-5">
+              {reportContent.title}
+            </h2>
+            <p className="text-slate-500 text-xl font-medium max-w-3xl mx-auto">
+              {reportContent.description}
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-10 items-start">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-7"
+            >
+              <div className="bg-white rounded-[2rem] border border-slate-200/80 shadow-[0_30px_70px_-30px_rgba(15,23,42,0.35)] overflow-hidden">
+                <div className="px-7 py-5 bg-slate-900 text-white flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.2em] text-slate-300 font-bold">Diagnostic Report</p>
+                    <p className="text-lg font-black mt-1">{sampleReport.testName}</p>
+                  </div>
+                  <span className="text-[11px] bg-indigo-500/20 border border-indigo-400/40 text-indigo-200 px-3 py-1.5 rounded-full font-bold uppercase tracking-wider">
+                    Final
+                  </span>
+                </div>
+
+                <div className="p-7">
+                  <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3 mb-6 text-sm">
+                    <p><span className="text-slate-400 font-semibold">Patient:</span> <span className="font-bold text-slate-900">{sampleReport.patientName}</span></p>
+                    <p><span className="text-slate-400 font-semibold">Patient ID:</span> <span className="font-bold text-slate-900">{sampleReport.patientId}</span></p>
+                    <p><span className="text-slate-400 font-semibold">Age / Sex:</span> <span className="font-bold text-slate-900">{sampleReport.ageSex}</span></p>
+                    <p><span className="text-slate-400 font-semibold">Collected:</span> <span className="font-bold text-slate-900">{sampleReport.collectedOn}</span></p>
+                    <p><span className="text-slate-400 font-semibold">Reported:</span> <span className="font-bold text-slate-900">{sampleReport.reportedOn}</span></p>
+                  </div>
+
+                  <div className="rounded-2xl border border-slate-200 overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-100 text-slate-600">
+                        <tr>
+                          <th className="text-left px-4 py-3 font-bold">Parameter</th>
+                          <th className="text-left px-4 py-3 font-bold">Result</th>
+                          <th className="text-left px-4 py-3 font-bold">Reference</th>
+                          <th className="text-left px-4 py-3 font-bold">Flag</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sampleReport.results.map((row, index) => (
+                          <tr key={index} className="border-t border-slate-100">
+                            <td className="px-4 py-3 font-semibold text-slate-800">{row.parameter}</td>
+                            <td className={`px-4 py-3 font-black ${row.flag === "Normal" ? "text-slate-900" : "text-rose-600"}`}>
+                              {row.value}
+                            </td>
+                            <td className="px-4 py-3 text-slate-500">{row.range}</td>
+                            <td className="px-4 py-3">
+                              <span
+                                className={`inline-flex px-2.5 py-1 rounded-full text-xs font-bold ${
+                                  row.flag === "Normal"
+                                    ? "bg-emerald-50 text-emerald-700"
+                                    : "bg-rose-50 text-rose-700"
+                                }`}
+                              >
+                                {row.flag}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="mt-6 p-4 rounded-2xl bg-indigo-50 border border-indigo-100">
+                    <p className="text-xs uppercase tracking-widest text-indigo-600 font-bold mb-2">
+                      Interpretation
+                    </p>
+                    <p className="text-sm text-slate-700 font-medium leading-relaxed">
+                      {sampleReport.interpretation}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="lg:col-span-5 space-y-5"
+            >
+              {reportContent.highlights.map((item, i) => (
+                <ReportExplainItem key={i} {...item} />
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
-      <section id="features" className="py-32">
+      <section id="features" className="pt-16 pb-32">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
             <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-slate-900 mb-6">Precision Engineering</h2>
@@ -182,7 +332,10 @@ const LabFlowLanding = () => {
               {Content.CLOSING_CONTENT.headline} <br />
               <span className="text-indigo-400 italic font-serif font-normal">{Content.CLOSING_CONTENT.subheadline}</span>
             </h2>
-            <button className="bg-indigo-600 text-white px-12 py-6 rounded-2xl font-black text-xl hover:bg-indigo-500 hover:scale-105 transition-all duration-300 shadow-[0_20px_50px_rgba(79,70,229,0.3)]">
+            <button
+              onClick={openLeadForm}
+              className="bg-indigo-600 text-white px-12 py-6 rounded-2xl font-black text-xl hover:bg-indigo-500 hover:scale-105 transition-all duration-300 shadow-[0_20px_50px_rgba(79,70,229,0.3)]"
+            >
               {Content.CLOSING_CONTENT.cta}
             </button>
           </motion.div>
@@ -208,6 +361,36 @@ const LabFlowLanding = () => {
           </div>
         </div>
       </footer>
+
+      {isLeadFormOpen && (
+        <div
+          className="fixed inset-0 z-[70] bg-slate-900/70 backdrop-blur-sm flex items-center justify-center px-4 py-6"
+          onClick={closeLeadForm}
+        >
+          <div
+            className="w-full max-w-5xl h-[90vh] bg-white rounded-3xl overflow-hidden shadow-[0_40px_120px_-25px_rgba(0,0,0,0.45)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="h-14 px-5 border-b border-slate-200 flex items-center justify-between bg-white">
+              <p className="text-sm font-bold text-slate-700 tracking-wide">Book a Demo</p>
+              <button
+                onClick={closeLeadForm}
+                className="w-9 h-9 rounded-full border border-slate-200 hover:bg-slate-100 transition-colors flex items-center justify-center"
+                aria-label="Close form"
+              >
+                <X className="w-5 h-5 text-slate-600" />
+              </button>
+            </div>
+            <iframe
+              src={embeddedGoogleFormUrl}
+              title="LabFlow Lead Form"
+              className="w-full h-[calc(90vh-56px)] border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
