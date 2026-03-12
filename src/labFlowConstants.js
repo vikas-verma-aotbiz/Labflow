@@ -13,7 +13,6 @@ export const NAV_LINKS = [
   { label: "Why Us", href: "#why-us" },
   { label: "Reports", href: "#reports" },
   { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
 ];
 
 export const HERO_CONTENT = {
